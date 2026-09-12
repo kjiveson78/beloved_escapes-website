@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Manrope:wght@300;400;500;600&family=Parisienne&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #030812; }
+  body { font-family: Manrope, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #d8b46a; text-decoration: none; }
+  a:hover { color: #f0d89c; }
+  :focus-visible { outline: 2px solid #f0d89c; outline-offset: 3px; border-radius: 4px; }
+  @keyframes heroReveal { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes lineIn { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
+  @keyframes maskIn { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+  @keyframes sweep { from { transform: translateX(-140%) skewX(-18deg); } to { transform: translateX(340%) skewX(-18deg); } }
+  @keyframes nebulaDriftA { 0%,100% { transform: translate3d(-2%, 0, 0) scale(1.08); } 50% { transform: translate3d(3%, -2%, 0) scale(1.16); } }
+  @keyframes nebulaDriftB { 0%,100% { transform: translate3d(2%, 1%, 0) scale(1.14); } 50% { transform: translate3d(-3%, -1%, 0) scale(1.06); } }
+  @keyframes earthGlow { 0%,100% { opacity: .5; transform: scale(1); } 50% { opacity: .75; transform: scale(1.04); } }
+  @keyframes scrollDot { 0% { opacity: 0; transform: translateY(-6px); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateY(12px); } }
+  @keyframes stripSweep { 0% { transform: translateX(-60%); } 100% { transform: translateX(160%); } }
+  @keyframes sceneFade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes watchIn { from { opacity: 0; transform: translateY(26px) scale(.94); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes watchBreathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.015); } }
+  @keyframes catIn { from { opacity: 0; transform: translateY(16px) scale(.88); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes destinationFloat { 0%,100% { transform: translate3d(0,0,12px) rotate(-.3deg); } 50% { transform: translate3d(0,-6px,26px) rotate(.3deg); } }
+  @keyframes btnIn { from { opacity: 0; transform: translateY(18px) scale(.94) scaleX(.62); } 60% { opacity: 1; } to { opacity: 1; transform: translateY(0) scale(1) scaleX(1); } }
+  @keyframes labelRise { from { opacity: 0; transform: translateY(14px); letter-spacing: .34em; } to { opacity: 1; transform: translateY(0); letter-spacing: .18em; } }
+  @keyframes orbitSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes orbitCounter { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+  @keyframes navItemIn { from { opacity: 0; transform: translateY(10px) perspective(700px) rotateX(2deg); } to { opacity: 1; transform: translateY(0) perspective(700px) rotateX(0deg); } }
+</style>
+</helmet>
+
+<div style="background:#030812;color:#f8f1e5;min-height:100vh;overflow-x:hidden">
+
+  <header style="position:sticky;top:0;z-index:60;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:linear-gradient(180deg,rgba(7,17,31,.92),rgba(7,17,31,.72));border-bottom:1px solid rgba(216,180,106,.22)">
+    <div style="max-width:1440px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:14px clamp(16px,3vw,40px)">
+      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:10px">
+      <a href="#top" style="display:flex;flex-direction:column;line-height:1;opacity:0;animation:heroReveal 800ms cubic-bezier(.16,1,.3,1) 0ms forwards">
+        <span style="font-family:Parisienne,cursive;font-size:clamp(28px,3vw,38px);color:#d8b46a">Beloved Escapes</span>
+        <span style="font-family:Manrope;font-size:10px;letter-spacing:.34em;color:rgba(248,241,229,.55);margin-top:6px;white-space:nowrap">ABTA P7384 · ATOL 12560</span>
+      </a>
+
+      <div style="{{ audioWrapStyle }}">
+        <audio id="belovedMusic" ref="{{ audioRef }}" autoplay="{{ true }}" loop="{{ true }}" preload="auto">
+          <source src="audio/escape-beautifully.mp3" type="audio/mpeg" />
+        </audio>
+        <button type="button" onClick="{{ toggleAudio }}" aria-label="{{ audioLabel }}" aria-pressed="{{ audioPlaying }}" disabled="{{ audioDisabled }}" style="{{ audioBtnStyle }}">
+          <span aria-hidden="true" style="{{ audioIconStyle }}">
+            <sc-for list="{{ audioGlyphs }}" as="g" hint-placeholder-count="2">
+              <span style="{{ g.style }}"></span>
+            </sc-for>
+          </span>
+          <span style="font-size:10px;letter-spacing:.24em;text-transform:uppercase">{{ audioText }}</span>
+        </button>
+      </div>
+      </div>
+
+      <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+        <nav aria-label="Primary" style="opacity:0;animation:heroReveal 800ms cubic-bezier(.16,1,.3,1) 100ms forwards">
+          <ul style="display:flex;align-items:center;gap:6px;list-style:none;margin:0;padding:0">
+            <sc-for list="{{ navLinks }}" as="link" hint-placeholder-count="7">
+              <li style="{{ link.itemStyle }}">
+                <a href="{{ link.href }}" style="display:block;padding:12px 14px;border-radius:12px;border:1px solid transparent;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#f8f1e5;transition:all 380ms cubic-bezier(.16,1,.3,1);transform-style:preserve-3d" style-hover="border-color:rgba(216,180,106,.55);background:rgba(216,180,106,.10);color:#f0d89c;transform:perspective(700px) rotateY(2deg) translateY(-3px);box-shadow:0 12px 26px rgba(0,0,0,.45)">{{ link.label }}</a>
+              </li>
+            </sc-for>
+          </ul>
+        </nav>
+        <a href="tel:01512039633" style="padding:12px 20px;border-radius:999px;border:1px solid rgba(216,180,106,.45);font-size:12px;letter-spacing:.18em;color:#d8b46a;white-space:nowrap;opacity:0;animation:heroReveal 800ms cubic-bezier(.16,1,.3,1) 160ms forwards" style-hover="background:rgba(216,180,106,.12)">0151 203 9633</a>
+      </sc-if>
+
+      <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+        <button type="button" aria-label="Open menu" aria-expanded="{{ menuOpen }}" onClick="{{ toggleMenu }}" ref="{{ menuButtonRef }}" style="min-width:48px;min-height:48px;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:12px;border-radius:12px;border:1px solid rgba(216,180,106,.4);background:rgba(216,180,106,.06);cursor:pointer">
+          <span style="display:block;width:22px;height:1.5px;background:#d8b46a"></span>
+          <span style="display:block;width:22px;height:1.5px;background:#d8b46a"></span>
+          <span style="display:block;width:14px;height:1.5px;background:#d8b46a"></span>
+        </button>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+      <nav aria-label="Mobile" ref="{{ menuRef }}" style="border-top:1px solid rgba(216,180,106,.2);background:rgba(3,8,18,.96);backdrop-filter:blur(18px);padding:8px clamp(16px,4vw,32px) 20px">
+        <ul style="display:flex;flex-direction:column;gap:4px;list-style:none;margin:0;padding:0">
+          <sc-for list="{{ mobileLinks }}" as="link" hint-placeholder-count="7">
+            <li style="{{ link.itemStyle }}">
+              <a href="{{ link.href }}" onClick="{{ closeMenu }}" style="display:flex;align-items:center;min-height:48px;padding:0 8px;border-bottom:1px solid rgba(216,180,106,.12);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:#f8f1e5">{{ link.label }}</a>
+            </li>
+          </sc-for>
+          <li>
+            <a href="tel:01512039633" style="display:flex;align-items:center;min-height:48px;padding:0 8px;font-size:14px;letter-spacing:.16em;color:#d8b46a">0151 203 9633</a>
+          </li>
+        </ul>
+      </nav>
+    </sc-if>
+  </header>
+
+  <main id="top">
+
+    <section aria-label="Beloved Escapes hero" style="position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;background:#030812">
+      <video aria-hidden="true" style="position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;filter:saturate(.42) brightness(.46) contrast(1.05) hue-rotate(-14deg)" autoplay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="auto" poster="public/images/posters/space-poster.webp" ref="{{ spaceVideoRef }}"></video>
+      <div aria-hidden="true" style="position:absolute;top:0;left:0;right:0;height:200px;z-index:2;background:linear-gradient(180deg,#030812,rgba(3,8,18,0))"></div>
+      <div aria-hidden="true" style="position:absolute;bottom:0;left:0;right:0;height:200px;z-index:2;background:linear-gradient(0deg,#030812,rgba(3,8,18,0))"></div>
+      <div aria-hidden="true" style="{{ nebulaA }}"></div>
+      <div aria-hidden="true" style="{{ nebulaB }}"></div>
+      <div aria-hidden="true" style="position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(7,17,31,.55),rgba(3,8,18,.62))"></div>
+      <div aria-hidden="true" style="position:absolute;inset:0;z-index:2;background:radial-gradient(120% 80% at 50% 50%, rgba(3,8,18,0) 28%, rgba(3,8,18,.74) 76%, #030812 100%)"></div>
+      <div aria-hidden="true" style="position:absolute;inset:0;z-index:2;background:linear-gradient(90deg, rgba(3,8,18,0) 38%, rgba(3,8,18,.62) 62%, rgba(3,8,18,.78) 100%)"></div>
+
+
+      <div style="position:relative;z-index:3;width:100%;max-width:1440px;margin:0 auto;padding:clamp(48px,7vh,96px) clamp(20px,4vw,56px);display:flex;flex-wrap:wrap;align-items:center;gap:clamp(24px,5vw,64px)">
+
+        <div style="flex:1 1 340px;position:relative;display:flex;justify-content:center;min-width:0">
+          <div aria-hidden="true" style="{{ earthHalo }}"></div>
+          <video style="position:relative;width:min(100%,620px);aspect-ratio:1/1;object-fit:contain;mix-blend-mode:screen;filter:saturate(1.05) contrast(1.05);-webkit-mask-image:radial-gradient(circle at 50% 50%, #000 62%, rgba(0,0,0,0) 74%);mask-image:radial-gradient(circle at 50% 50%, #000 62%, rgba(0,0,0,0) 74%)" autoplay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="metadata" poster="" ref="{{ earthVideoRef }}" aria-label="Earth rotating in space with an aircraft tracing a flight path">
+            <source src="public/videos/spinning-earth.mp4" type="video/mp4" />
+          </video>
+        </div>
+
+        <div style="flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:22px">
+          <div style="width:96px;height:1px;background:linear-gradient(90deg,#d8b46a,rgba(216,180,106,0));transform-origin:left;opacity:0;animation:lineIn 700ms cubic-bezier(.16,1,.3,1) 240ms forwards"></div>
+          <h1 style="margin:0;font-family:Manrope;font-weight:400;font-size:clamp(13px,1.4vw,16px);letter-spacing:.46em;text-transform:uppercase;color:#d8b46a;opacity:0;animation:maskIn 900ms cubic-bezier(.16,1,.3,1) 300ms forwards">Beloved Escapes</h1>
+          <p style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(44px,6.4vw,88px);line-height:1.02;color:#f8f1e5;text-wrap:pretty;opacity:0;animation:heroReveal 900ms cubic-bezier(.16,1,.3,1) 500ms forwards">Escape <em style="font-family:Parisienne,cursive;font-style:normal;color:#d8b46a">Beautifully</em></p>
+          <p style="margin:0;max-width:34ch;font-size:clamp(15px,1.4vw,18px);line-height:1.65;color:rgba(248,241,229,.86);opacity:0;animation:heroReveal 900ms cubic-bezier(.16,1,.3,1) 700ms forwards">Extraordinary journeys, thoughtfully created around you.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:14px">
+            <div style="{{ primaryWrapStyle }}">
+              <a href="#find-your-escape" onMouseEnter="{{ onPrimaryEnter }}" onMouseLeave="{{ onPrimaryLeave }}" onMouseDown="{{ onPrimaryDown }}" onMouseUp="{{ onPrimaryUp }}" style="{{ primaryCtaStyle }}">
+                <span style="display:block;overflow:hidden"><span style="{{ primaryLabelStyle }}">Find Your Beloved Escape</span></span>
+                <span aria-hidden="true" style="{{ primaryArrowStyle }}">&#8594;</span>
+                <span aria-hidden="true" style="{{ ctaSweep }}"></span>
+              </a>
+            </div>
+            <div style="{{ secondaryWrapStyle }}">
+              <a href="#find-your-escape" onMouseEnter="{{ onSecondaryEnter }}" onMouseLeave="{{ onSecondaryLeave }}" onMouseDown="{{ onSecondaryDown }}" onMouseUp="{{ onSecondaryUp }}" style="{{ secondaryCtaStyle }}">
+                <span style="display:block;overflow:hidden"><span style="{{ secondaryLabelStyle }}">Make Memories Somewhere Beautiful</span></span>
+                <span aria-hidden="true" style="{{ secondaryArrowStyle }}">&#8594;</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div aria-hidden="true" style="position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:heroReveal 900ms cubic-bezier(.16,1,.3,1) 1300ms forwards">
+        <span style="font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:rgba(248,241,229,.5)">Scroll</span>
+        <span style="{{ scrollDot }}"></span>
+      </div>
+    </section>
+
+    <div style="position:relative;height:clamp(180px,28vh,320px);max-height:320px;overflow:hidden;background:linear-gradient(180deg,#030812 0%,#07111f 35%,#160f0c 72%,#0b0a12 100%)">
+      <div aria-hidden="true" style="{{ stripSweepA }}"></div>
+      <div aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 120%, rgba(154,99,56,.34), rgba(3,8,18,0) 70%)"></div>
+
+    </div>
+
+    <section id="find-your-escape" ref="{{ sceneRef }}" aria-labelledby="watch-heading" style="position:relative;overflow:visible;background:#07111f;padding:clamp(40px,7vh,96px) clamp(20px,4vw,56px) clamp(56px,8vh,110px)">
+      <div aria-hidden="true" style="{{ sceneBackdrop }}"></div>
+      <div aria-hidden="true" style="{{ sceneBronze }}"></div>
+
+
+      <div style="{{ sceneContentStyle }}">
+
+        <sc-if value="{{ showRing }}" hint-placeholder-val="{{ true }}">
+          <div style="{{ ringOuterStyle }}" onMouseMove="{{ onPointer }}" onMouseLeave="{{ onPointerLeave }}">
+            <div style="{{ ringInnerStyle }}">
+              <div style="{{ watchWrapStyle }}">
+                <div style="{{ watchBreatheStyle }}">
+                  <img src="public/images/pocket-watch.png" alt="Antique bronze pocket watch with Roman numerals" width="820" height="820" style="width:100%;height:auto;display:block;mix-blend-mode:screen;-webkit-mask-image:radial-gradient(circle at 50% 50%, #000 46%, rgba(0,0,0,0) 57%);mask-image:radial-gradient(circle at 50% 50%, #000 46%, rgba(0,0,0,0) 57%);filter:drop-shadow(0 40px 80px rgba(0,0,0,.6)) drop-shadow(0 0 60px rgba(154,99,56,.35))" />
+                </div>
+              </div>
+              <div style="{{ orbitStyle }}">
+              <sc-for list="{{ ringCards }}" as="card" hint-placeholder-count="12">
+                <div style="{{ card.wrapStyle }}">
+                  <div style="{{ card.counterStyle }}">
+                  <div style="{{ card.animStyle }}">
+                    <a href="{{ card.url }}" target="_blank" rel="noopener noreferrer" title="{{ card.title }}" style="display:block;border-radius:14px;overflow:hidden;border:1px solid rgba(216,180,106,.45);background:#0b1522;box-shadow:0 18px 34px rgba(0,0,0,.5);transition:transform 380ms cubic-bezier(.16,1,.3,1),box-shadow 380ms,border-color 380ms" style-hover="transform:translateZ(28px) scale(1.04);border-color:#f0d89c;box-shadow:0 30px 60px rgba(0,0,0,.65),0 0 32px rgba(216,180,106,.45)" style-focus="transform:translateZ(28px) scale(1.04);border-color:#f0d89c;box-shadow:0 0 34px rgba(216,180,106,.55)">
+                      <span style="display:block;position:relative;width:100%;padding-top:62.5%;overflow:hidden">
+                        <img src="{{ card.image }}" alt="{{ card.alt }}" width="320" height="200" loading="lazy" style="position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover" />
+                      </span>
+                      <span style="display:flex;align-items:center;height:30px;padding:0 8px;font-size:8.5px;line-height:1.15;letter-spacing:.05em;text-transform:uppercase;color:#f0d89c;background:rgba(3,8,18,.9);overflow:hidden">{{ card.title }}</span>
+                    </a>
+                  </div>
+                  </div>
+                </div>
+              </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <div style="{{ taglineColStyle }}">
+          <h2 id="watch-heading" style="{{ taglineStyle }}">
+            <span style="display:block;font-family:Parisienne,cursive;font-weight:400;font-size:clamp(52px,7vw,96px);line-height:1;color:#f0d89c;text-shadow:1px 1px 0 #a8753f,2px 2px 0 #80512d,3px 3px 0 #59361f,0 14px 34px rgba(0,0,0,.45)">Make Time</span>
+            <span style="display:block;margin-top:8px;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(28px,3.6vw,52px);letter-spacing:.24em;text-transform:uppercase;color:#f8f1e5;text-shadow:0 10px 26px rgba(0,0,0,.5)">For Yourself</span>
+          </h2>
+          <p style="{{ taglineCopyStyle }}">Twelve ways to escape. One journey designed around you.</p>
+          <p style="{{ taglineHintStyle }}">Choose an hour on the watch to open its catalogue.</p>
+        </div>
+
+        <sc-if value="{{ showGrid }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1 1 100%;display:flex;flex-direction:column;gap:22px">
+            <div style="display:flex;justify-content:center">
+              <img src="public/images/pocket-watch.png" alt="Antique bronze pocket watch with Roman numerals" width="820" height="820" style="width:min(74vw,420px);height:auto;display:block;mix-blend-mode:screen;-webkit-mask-image:radial-gradient(circle at 50% 50%, #000 46%, rgba(0,0,0,0) 57%);mask-image:radial-gradient(circle at 50% 50%, #000 46%, rgba(0,0,0,0) 57%);filter:drop-shadow(0 30px 60px rgba(0,0,0,.6))" />
+            </div>
+            <ul style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;list-style:none;margin:0;padding:0">
+              <sc-for list="{{ ringCards }}" as="card" hint-placeholder-count="12">
+                <li>
+                  <a href="{{ card.url }}" target="_blank" rel="noopener noreferrer" style="display:block;min-height:48px;border-radius:14px;overflow:hidden;border:1px solid rgba(216,180,106,.4);background:#0b1522">
+                    <img src="{{ card.image }}" alt="{{ card.alt }}" width="320" height="200" loading="lazy" style="display:block;width:100%;aspect-ratio:16/10;object-fit:cover" />
+                    <span style="display:block;padding:12px 12px 14px;font-size:12px;line-height:1.35;letter-spacing:.08em;text-transform:uppercase;color:#f0d89c">{{ card.title }}</span>
+                  </a>
+                </li>
+              </sc-for>
+            </ul>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="position:relative;z-index:2;max-width:1440px;margin:clamp(48px,7vh,90px) auto 0">
+        <h3 style="margin:0 0 18px;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(26px,3vw,38px);color:#f8f1e5">Curated right now</h3>
+        <div role="tablist" aria-label="Catalogues" style="display:flex;flex-wrap:wrap;gap:12px">
+          <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="2">
+            <button type="button" role="tab" aria-selected="{{ tab.selected }}" onClick="{{ tab.onSelect }}" style="{{ tab.style }}">{{ tab.title }}</button>
+          </sc-for>
+        </div>
+        <div role="tabpanel" style="margin-top:18px;max-width:680px;border:1px solid rgba(216,180,106,.28);border-radius:20px;padding:clamp(20px,3vw,32px);background:linear-gradient(160deg,rgba(216,180,106,.10),rgba(7,17,31,.4))">
+          <p style="margin:0 0 18px;font-size:16px;line-height:1.7;color:rgba(248,241,229,.9)">{{ activeTabCopy }}</p>
+          <a href="{{ activeTabUrl }}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;min-height:48px;padding:0 26px;border-radius:999px;background:#d8b46a;color:#07111f;font-weight:600;font-size:12px;letter-spacing:.18em;text-transform:uppercase" style-hover="background:#f0d89c">{{ activeTabCta }}</a>
+        </div>
+      </div>
+
+      <div style="position:relative;z-index:2;max-width:1440px;margin:32px auto 0">
+        <button type="button" onClick="{{ toggleMotion }}" style="min-height:44px;padding:0 18px;border-radius:999px;border:1px solid rgba(216,180,106,.35);background:transparent;color:rgba(248,241,229,.75);font-family:Manrope;font-size:11px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer" style-hover="border-color:#d8b46a;color:#f0d89c">{{ motionLabel }}</button>
+      </div>
+    </section>
+
+    <footer style="position:relative;overflow:hidden;background:#07111f;border-top:1px solid rgba(216,180,106,.18)">
+      <div aria-hidden="true" style="position:absolute;inset:0;opacity:.4;background:radial-gradient(60% 80% at 20% 0%, rgba(216,180,106,.16), transparent 60%), radial-gradient(50% 80% at 80% 100%, rgba(49,197,199,.14), transparent 60%)"></div>
+      <div style="position:relative;max-width:1440px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:40px;padding:clamp(40px,6vh,64px) clamp(20px,4vw,56px)">
+        <div>
+          <div style="font-family:Parisienne,cursive;font-size:38px;color:#d8b46a">Beloved Escapes</div>
+          <p style="margin:12px 0 0;max-width:36ch;font-size:14px;line-height:1.7;color:rgba(248,241,229,.82)">Luxury cruises and unforgettable escapes, hand-crafted by an independent travel agent working under InteleTravel.</p>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:20px;font-size:14px">
+            <a href="mailto:enquiries@belovedescapes.co.uk">enquiries@belovedescapes.co.uk</a>
+            <a href="tel:01512039633">0151 203 9633</a>
+            <span style="color:rgba(248,241,229,.72)">16 Lower Green, Wirral, CH49 8HR</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(216,180,106,.85)">Explore</div>
+          <ul style="display:flex;flex-direction:column;gap:10px;margin:16px 0 0;padding:0;list-style:none;font-size:14px">
+            <sc-for list="{{ footerLinks }}" as="link" hint-placeholder-count="6">
+              <li><a href="{{ link.href }}">{{ link.label }}</a></li>
+            </sc-for>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(216,180,106,.85)">Financially protected</div>
+          <p style="margin:16px 0 0;font-size:14px;line-height:1.7;color:rgba(248,241,229,.82)">ABTA No. P7384 · ATOL Protected 12560. When you book a package that includes flights with us, you're protected by ATOL and ABTA. InteleTravel hold the ABTA licence unless a supplier has its own.</p>
+        </div>
+      </div>
+      <div style="position:relative;border-top:1px solid rgba(216,180,106,.15);padding:16px;text-align:center;font-size:12px;color:rgba(248,241,229,.7)">© 2026 Beloved Escapes — Independent Travel Agent under InteleTravel</div>
+    </footer>
+  </main>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;motionEnabled&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;floatIntensity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0,&quot;max&quot;:1.5,&quot;step&quot;:0.1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;watchSize&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:720,&quot;min&quot;:560,&quot;max&quot;:860,&quot;step&quot;:20,&quot;unit&quot;:&quot;px&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Layout&quot;}}">
+const L = "https://id-preview--3e9da503-5b01-4593-83b4-e3002bc8fd06.lovable.app/__l5e/assets-v1/";
+
+const CATS = [
+  { position: 1, title: "Cruises & Voyages", id: "1f821abd-2a77-4efd-8f26-090d6760d466", file: "cat-1.jpg", alt: "Cruise ship sailing on a calm ocean at golden hour", url: "https://v2.app.moguplatform.com/catalogs/substantial-zoo-26432" },
+  { position: 2, title: "Luxury & Premium", id: "417a044b-19a9-4242-9518-4e258cf331a6", file: "cat-2.jpg", alt: "Luxury resort infinity pool overlooking the sea at sunset", url: "https://v2.app.moguplatform.com/catalogs/most-horse-31878" },
+  { position: 3, title: "Beach & All-Inclusive", id: "891926cb-d8f5-4b80-86e1-976ca9aa0abf", file: "cat-3.jpg", alt: "Tropical white sand beach with palm trees and turquoise water", url: "https://v2.app.moguplatform.com/catalogs/scarce-printer-37217" },
+  { position: 4, title: "Touring & Exploration", id: "6d32002d-fb38-4242-aafc-28bedf4b483a", file: "cat-4.jpg", alt: "Scenic touring road winding through mountain scenery", url: "https://v2.app.moguplatform.com/catalogs/abundant-finland-26570" },
+  { position: 5, title: "Active & Adventure", id: "4ba6d15e-3358-4d33-ad15-8844ffc7aaa2", file: "cat-5.jpg", alt: "Hikers on a mountain ridge above a lake at sunrise", url: "https://v2.app.moguplatform.com/catalogs/orange-morn-73722" },
+  { position: 6, title: "Family & Theme Parks", id: "75fb09f1-6cb2-4d5a-99e2-1ff0232f6639", file: "cat-6.jpg", alt: "Theme park carousel and big wheel lit up at dusk", url: "https://v2.app.moguplatform.com/catalogs/few-continent-43181" },
+  { position: 7, title: "Romance & Special Occasions", id: "32381f0e-6131-4098-b241-1edb07c70ec8", file: "cat-7.jpg", alt: "Candlelit dinner table for two on a beach at sunset", url: "https://v2.app.moguplatform.com/catalogs/white-printer-41259" },
+  { position: 8, title: "City Breaks & Short Escapes", id: "49021f2d-b170-4594-85cb-8fae06e0c14b", file: "cat-8.jpg", alt: "European city rooftops and streets at blue hour", url: "https://v2.app.moguplatform.com/catalogs/billions-cpu-36360" },
+  { position: 9, title: "Culture, Heritage & Ancestry", id: "bb511fa2-7449-46d6-abc9-b6970ab864ab", file: "cat-9.jpg", alt: "Historic old town square with a stone clock tower", url: "https://v2.app.moguplatform.com/catalogs/black-eve-87466" },
+  { position: 10, title: "Rail & Scenic Journeys", id: "59a5743c-cea2-4d1f-a4c4-ff267cb6a64d", file: "cat-10.jpg", alt: "Train crossing a viaduct through a mountain valley", url: "https://v2.app.moguplatform.com/catalogs/orange-bird-98110" },
+  { position: 11, title: "Sports, Music & Events", id: "0ea59e71-0808-46d9-9317-23dd6cd16eab", file: "cat-11.jpg", alt: "Packed stadium concert with stage lights at night", url: "https://v2.app.moguplatform.com/catalogs/green-portugal-63836" },
+  { position: 12, title: "Groups & Special Interest Travel", id: "7f1d7d26-59d2-4f77-bdf3-ac41eef9fa3c", file: "cat-12.jpg", alt: "Small group of travellers walking a mountain trail together", url: "https://v2.app.moguplatform.com/catalogs/abundant-sugar-96244" },
+];
+
+const TABS = [
+  { id: "featured", title: "Featured", url: "https://v2.app.moguplatform.com/catalogs/substantial-printer-92469", copy: "A rotating selection of the escapes we are recommending this month — handpicked sailings, resorts and journeys worth booking early.", cta: "Open featured catalogue" },
+  { id: "special-offers", title: "Special Offers", url: "https://v2.app.moguplatform.com/catalogs/numerous-kangaroo-75498", copy: "Time-limited fares, onboard credit and package savings across our supplier network, refreshed as new offers are released.", cta: "Open special offers" },
+];
+
+class Component extends DCLogic {
+  state = { w: 1280, revealed: false, menuOpen: false, motionOn: true, tab: "featured", px: 0, py: 0, reduced: false, audioPlaying: false, hoverP: false, hoverS: false, downP: false, downS: false };
+
+  componentDidMount() {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    this.setState({ w: window.innerWidth, reduced: mq.matches, motionOn: !mq.matches && (this.props.motionEnabled ?? true) });
+    this._onResize = () => this.setState({ w: window.innerWidth });
+    window.addEventListener("resize", this._onResize);
+    this._onKey = (e) => { if (e.key === "Escape" && this.state.menuOpen) this.closeMenu(); };
+    window.addEventListener("keydown", this._onKey);
+    if (this._scene) {
+      this._io = new IntersectionObserver((entries) => {
+        if (entries.some((en) => en.isIntersecting) && !this.state.revealed) {
+          this.setState({ revealed: true });
+          this._io.disconnect();
+        }
+      }, { threshold: 0.12 });
+      this._io.observe(this._scene);
+    }
+  }
+
+  // Autoplay attempt; on rejection, arm a one-shot gesture listener.
+  tryAutoplay = () => {
+    const a = this._audio;
+    if (!a || this._userPaused || !a.paused) return;
+    const p = a.play();
+    if (p && p.catch) p.catch(() => { this.setState({ audioPlaying: false }); this.armGesture(); });
+  };
+
+  armGesture = () => {
+    if (this._gestureArmed) return;
+    this._gestureArmed = true;
+    const events = ["pointerdown", "touchstart", "click", "keydown", "wheel", "scroll"];
+    const start = (e) => {
+      // The button owns its own play/pause — never let the fallback pre-empt it.
+      const t = e && e.target;
+      if (t && t.closest && t.closest("button[aria-pressed]")) return;
+      const a = this._audio;
+      if (!a || this._userPaused || !a.paused) return;
+      this._unarm();
+      const p = a.play();
+      if (p && p.catch) p.catch(() => {});
+    };
+    events.forEach((e) => window.addEventListener(e, start, { capture: true, passive: true }));
+    this._unarm = () => events.forEach((e) => window.removeEventListener(e, start, true));
+  };
+
+  attachHls = (el) => {
+    if (!el || el._beAttached) return;
+    el._beAttached = true;
+    this._space = el;
+    const src = "https://stream.mux.com/8wrHPCX2dC3msyYU9ObwqNdm00u3ViXvOSHUMRYSEe5Q.m3u8";
+    const play = () => { const p = el.play(); if (p && p.catch) p.catch(() => {}); };
+    const native = el.canPlayType("application/vnd.apple.mpegurl");
+    let tries = 0;
+    const boot = () => {
+      if (window.Hls && window.Hls.isSupported()) {
+        this._hls = new window.Hls({ lowLatencyMode: false });
+        this._hls.loadSource(src);
+        this._hls.attachMedia(el);
+        this._hls.on(window.Hls.Events.MANIFEST_PARSED, play);
+        this._hls.on(window.Hls.Events.ERROR, (_e, d) => {
+          if (d && d.fatal) { this.setState({ spaceFailed: true }); this._hls.destroy(); }
+        });
+      } else if (native) {
+        el.src = src; play();
+      } else if (tries++ < 40) {
+        setTimeout(boot, 150);
+      } else {
+        this.setState({ spaceFailed: true });
+      }
+    };
+    boot();
+  };
+
+  componentWillUnmount() {
+    if (this._hls) this._hls.destroy();
+    if (this._unarm) this._unarm();
+    window.removeEventListener("resize", this._onResize);
+    window.removeEventListener("keydown", this._onKey);
+    if (this._io) this._io.disconnect();
+  }
+
+  closeMenu = () => {
+    this.setState({ menuOpen: false });
+    if (this._menuBtn) this._menuBtn.focus();
+  };
+
+  renderVals() {
+    const s = this.state;
+    const motion = s.motionOn && !s.reduced;
+    const wide = s.w >= 1000;
+    const narrow = !wide;
+    const showRing = wide;
+    const watchSize = this.props.watchSize ?? 720;
+    const floatK = this.props.floatIntensity ?? 1;
+    const revealed = s.revealed;
+
+    const ringCards = CATS.map((c, i) => {
+      const ang = ((c.position * 30) - 90) * Math.PI / 180;
+      const R = 42;
+      return {
+        title: c.title,
+        alt: c.alt,
+        url: c.url,
+        image: L + c.id + "/" + c.file,
+        wrapStyle: {
+          position: "absolute",
+          left: (50 + Math.cos(ang) * R) + "%",
+          top: (50 + Math.sin(ang) * R) + "%",
+          width: "clamp(104px,10.5vw,152px)",
+          transform: "translate(-50%,-50%)",
+          zIndex: 6,
+        },
+        counterStyle: {
+          animation: motion && revealed ? "orbitCounter 120s linear 4.8s infinite" : "none",
+        },
+        animStyle: {
+          opacity: revealed ? undefined : 0,
+          animation: revealed
+            ? "catIn 900ms cubic-bezier(.16,1,.3,1) " + (3200 + i * 95) + "ms both" +
+              (motion ? ", destinationFloat " + (4 + (i % 5) * 0.6) + "s ease-in-out " + (4.8 + i * 0.19) + "s infinite" : "")
+            : "none",
+        },
+      };
+    });
+
+    const tabs = TABS.map((t) => ({
+      title: t.title,
+      selected: s.tab === t.id,
+      onSelect: () => this.setState({ tab: t.id }),
+      style: {
+        minHeight: "48px",
+        padding: "0 26px",
+        borderRadius: "999px",
+        cursor: "pointer",
+        fontFamily: "Manrope",
+        fontSize: "12px",
+        letterSpacing: ".18em",
+        textTransform: "uppercase",
+        transition: "all 380ms cubic-bezier(.16,1,.3,1)",
+        border: s.tab === t.id ? "1px solid #f0d89c" : "1px solid rgba(216,180,106,.3)",
+        background: s.tab === t.id ? "rgba(216,180,106,.16)" : "transparent",
+        color: s.tab === t.id ? "#f0d89c" : "rgba(248,241,229,.78)",
+        transform: s.tab === t.id ? "translateY(-3px)" : "none",
+        boxShadow: s.tab === t.id ? "0 14px 30px rgba(0,0,0,.45)" : "none",
+      },
+    }));
+    const active = TABS.find((t) => t.id === s.tab) || TABS[0];
+
+    const nav = [
+      { href: "#top", label: "Home" },
+      { href: "#find-your-escape", label: "Find Your Escape" },
+      { href: "#find-your-escape", label: "Featured" },
+      { href: "#find-your-escape", label: "Special Offers" },
+      { href: "#about", label: "About" },
+      { href: "#testimonials", label: "Testimonials" },
+      { href: "#contact", label: "Contact" },
+    ];
+
+    return {
+      wide, narrow, showRing, showGrid: narrow,
+      menuOpen: s.menuOpen,
+      navLinks: nav.map((l, i) => ({ ...l, itemStyle: { animation: motion ? "navItemIn 380ms cubic-bezier(.16,1,.3,1) " + (140 + i * 60) + "ms both" : "none" } })),
+      mobileLinks: nav.map((l, i) => ({ ...l, itemStyle: { animation: "heroReveal 420ms cubic-bezier(.16,1,.3,1) " + (i * 50) + "ms both" } })),
+      footerLinks: [
+        { href: "#find-your-escape", label: "Find Your Escape" },
+        { href: "#about", label: "About" },
+        { href: "#testimonials", label: "Testimonials" },
+        { href: "#contact", label: "Contact" },
+        { href: "#privacy", label: "Privacy Policy" },
+        { href: "#terms", label: "Terms & Conditions" },
+      ],
+      toggleMenu: () => this.setState({ menuOpen: !s.menuOpen }),
+      closeMenu: this.closeMenu,
+      menuButtonRef: (el) => { this._menuBtn = el; },
+      menuRef: (el) => { if (el) { const f = el.querySelector("a"); if (f) f.focus(); } },
+      sceneRef: (el) => { this._scene = el; },
+      earthVideoRef: (el) => { if (el) { el.muted = true; const p = el.play(); if (p && p.catch) p.catch(() => {}); } },
+
+      nebulaA: {
+        position: "absolute", inset: "-12%", zIndex: 1,
+        background: "radial-gradient(46% 40% at 28% 34%, rgba(38,66,124,.55), rgba(3,8,18,0) 70%), radial-gradient(38% 34% at 72% 26%, rgba(88,62,132,.36), rgba(3,8,18,0) 70%)",
+        filter: "blur(22px)",
+        animation: motion ? "nebulaDriftA 46s ease-in-out infinite" : "none",
+      },
+      nebulaB: {
+        position: "absolute", inset: "-14%", zIndex: 1,
+        background: "radial-gradient(40% 34% at 62% 74%, rgba(154,99,56,.28), rgba(3,8,18,0) 70%), radial-gradient(30% 26% at 14% 78%, rgba(31,84,110,.3), rgba(3,8,18,0) 70%)",
+        filter: "blur(28px)",
+        animation: motion ? "nebulaDriftB 62s ease-in-out infinite" : "none",
+      },
+      earthHalo: {
+        position: "absolute", top: "50%", left: "50%", width: "min(100%,700px)", aspectRatio: "1/1",
+        transform: "translate(-50%,-50%)", borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(64,120,180,.22) 38%, rgba(216,180,106,.12) 52%, rgba(3,8,18,0) 70%)",
+        animation: motion ? "earthGlow 12s ease-in-out infinite" : "none",
+      },
+      travelVideoStyle: {
+        position: "absolute", inset: 0, zIndex: 0, width: "100%", height: "100%", objectFit: "cover",
+        opacity: revealed ? 1 : 0, transition: "opacity 1600ms ease 1000ms",
+      },
+      audioWrapStyle: {
+        animation: "heroReveal 800ms cubic-bezier(.16,1,.3,1) 220ms both",
+      },
+      audioRef: (el) => {
+        if (!el || el._beWired) { if (el) this._audio = el; return; }
+        el._beWired = true;
+        this._audio = el;
+        el.volume = 0.45;
+        el.autoplay = true;
+        el.loop = true;
+        el.preload = "auto";
+        el.currentTime = 0;
+        el.addEventListener("play", () => this.setState({ audioPlaying: true }));
+        el.addEventListener("playing", () => this.setState({ audioPlaying: true }));
+        el.addEventListener("pause", () => this.setState({ audioPlaying: false }));
+        el.addEventListener("ended", () => { el.currentTime = 0; if (el.paused) { const p = el.play(); if (p && p.catch) p.catch(() => {}); } });
+        // Only ever one live audio element — silence any element from a previous mount.
+        const prev = window.__beAudio;
+        if (prev && prev !== el) { try { prev.pause(); prev.removeAttribute("src"); prev.load(); } catch (err) {} }
+        window.__beAudio = el;
+        if (!el.getAttribute("src")) el.setAttribute("src", "audio/escape-beautifully.mp3");
+        el.load();
+        el.addEventListener("canplay", () => {
+          if (this._autoTried) return;
+          this._autoTried = true;
+          this.tryAutoplay();
+        });
+        this.tryAutoplay();
+      },
+      audioPlaying: s.audioPlaying,
+      audioGlyphs: s.audioPlaying
+        ? [{ k: "a", style: { display: "block", width: "3px", height: "12px", borderRadius: "1px", background: "#07111f" } },
+           { k: "b", style: { display: "block", width: "3px", height: "12px", borderRadius: "1px", background: "#07111f" } }]
+        : [{ k: "a", style: { display: "block", width: 0, height: 0, borderTop: "6.5px solid transparent", borderBottom: "6.5px solid transparent", borderLeft: "11px solid #07111f", marginLeft: "2px" } }],
+      audioText: "Escape Beautifully",
+      audioLabel: s.audioPlaying ? "Pause background music" : "Play background music",
+      audioDisabled: false,
+      audioIconStyle: { display: "flex", alignItems: "center", gap: "3px", height: "12px" },
+      audioBtnStyle: {
+        display: "inline-flex", alignItems: "center", gap: "8px",
+        minHeight: "44px", padding: "0 14px", borderRadius: "999px",
+        border: "1px solid rgba(240,216,156,.55)",
+        background: "linear-gradient(135deg,#f0d89c,#d8b46a 55%,#9a6338)",
+        boxShadow: "0 8px 20px rgba(0,0,0,.35)",
+        color: "#07111f", fontWeight: 600,
+        fontFamily: "Manrope", cursor: "pointer",
+        whiteSpace: "nowrap",
+        transition: "all 280ms cubic-bezier(.16,1,.3,1)",
+      },
+      toggleAudio: () => {
+        const a = this._audio;
+        if (!a) return;
+        if (a.paused) {
+          this._userPaused = false;
+          if (a.readyState === 0) a.load();
+          const p = a.play();
+          // A rejected play() is usually an autoplay-policy block, not a bad file.
+          if (p && p.catch) p.catch(() => this.armGesture());
+        } else {
+          this._userPaused = true;
+          if (this._unarm) this._unarm();
+          a.pause();
+        }
+      },
+      bgVideoRef: (el) => { if (el) { el.muted = true; const p = el.play(); if (p && p.catch) p.catch(() => {}); } },
+      spaceVideoRef: (el) => { if (el) { el.muted = true; el.loop = true; this.attachHls(el); } },
+
+      primaryWrapStyle: {
+        animation: motion ? "btnIn 500ms cubic-bezier(.16,1,.3,1) 900ms both" : "none",
+      },
+      secondaryWrapStyle: {
+        animation: motion ? "btnIn 500ms cubic-bezier(.16,1,.3,1) 1080ms both" : "none",
+      },
+      primaryCtaStyle: {
+        position: "relative", overflow: "hidden", display: "inline-flex", alignItems: "center", gap: "10px",
+        minHeight: "52px", padding: "0 28px", borderRadius: "999px", maxWidth: "100%",
+        background: "linear-gradient(135deg,#f0d89c,#d8b46a 55%,#9a6338)",
+        color: "#07111f", fontWeight: 600, fontSize: narrow ? "11.5px" : "13px", textTransform: "uppercase",
+        transition: "transform 280ms cubic-bezier(.16,1,.3,1), box-shadow 280ms",
+        transform: s.downP ? "scale(.985)" : s.hoverP ? "translateY(-3px) scale(1.015)" : "none",
+        boxShadow: s.hoverP ? "0 16px 38px rgba(0,0,0,.5), 0 0 28px rgba(240,216,156,.45)" : "0 8px 20px rgba(0,0,0,.35)",
+      },
+      secondaryCtaStyle: {
+        position: "relative", overflow: "hidden", display: "inline-flex", alignItems: "center", gap: "10px",
+        minHeight: "52px", padding: "0 26px", borderRadius: "999px", maxWidth: "100%",
+        border: "1px solid rgba(216,180,106,.55)", color: "#f8f1e5",
+        fontSize: narrow ? "11px" : "12.5px", textTransform: "uppercase",
+        transition: "transform 280ms cubic-bezier(.16,1,.3,1), background 280ms, box-shadow 280ms, border-color 280ms",
+        transform: s.downS ? "scale(.985)" : s.hoverS ? "translateY(-3px) scale(1.015)" : "none",
+        background: "linear-gradient(150deg, rgba(248,241,229,.14), rgba(7,17,31,.55) 46%, rgba(7,17,31,.72))",
+        backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
+        borderColor: s.hoverS ? "rgba(240,216,156,.9)" : "rgba(216,180,106,.55)",
+        boxShadow: s.hoverS
+          ? "inset 0 1px 0 rgba(248,241,229,.35), 0 16px 34px rgba(0,0,0,.45), 0 0 26px rgba(216,180,106,.3)"
+          : "inset 0 1px 0 rgba(248,241,229,.22), 0 8px 20px rgba(0,0,0,.35)",
+      },
+      primaryLabelStyle: {
+        display: "block", letterSpacing: ".18em", whiteSpace: "nowrap", lineHeight: 1.25,
+        animation: motion ? "labelRise 450ms cubic-bezier(.16,1,.3,1) 1150ms both" : "none",
+      },
+      secondaryLabelStyle: {
+        display: "block", letterSpacing: ".18em", whiteSpace: "nowrap", lineHeight: 1.25,
+        animation: motion ? "labelRise 450ms cubic-bezier(.16,1,.3,1) 1330ms both" : "none",
+      },
+      primaryArrowStyle: {
+        display: "block", transition: "transform 280ms cubic-bezier(.16,1,.3,1)",
+        transform: s.hoverP ? "translateX(6px)" : "none",
+      },
+      secondaryArrowStyle: {
+        display: "block", transition: "transform 280ms cubic-bezier(.16,1,.3,1)",
+        transform: s.hoverS ? "translateX(6px)" : "none",
+      },
+      onPrimaryEnter: () => this.setState({ hoverP: true }),
+      onPrimaryLeave: () => this.setState({ hoverP: false, downP: false }),
+      onPrimaryDown: () => this.setState({ downP: true }),
+      onPrimaryUp: () => this.setState({ downP: false }),
+      onSecondaryEnter: () => this.setState({ hoverS: true }),
+      onSecondaryLeave: () => this.setState({ hoverS: false, downS: false }),
+      onSecondaryDown: () => this.setState({ downS: true }),
+      onSecondaryUp: () => this.setState({ downS: false }),
+
+      ctaSweep: {
+        position: "absolute", top: 0, left: 0, width: "40%", height: "100%",
+        background: "linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.55), rgba(255,255,255,0))",
+        animation: motion ? "sweep 900ms cubic-bezier(.4,0,.2,1) 1500ms 1 both" : "none", opacity: motion ? undefined : 0, pointerEvents: "none",
+      },
+      scrollDot: {
+        display: "block", width: "1px", height: "38px",
+        background: "linear-gradient(180deg,#d8b46a,rgba(216,180,106,0))",
+        animation: motion ? "scrollDot 2.4s ease-in-out infinite" : "none",
+      },
+      stripSweepA: {
+        position: "absolute", top: 0, left: 0, width: "42%", height: "100%",
+        background: "linear-gradient(90deg, rgba(216,180,106,0), rgba(216,180,106,.22), rgba(154,99,56,.3), rgba(216,180,106,0))",
+        filter: "blur(18px)",
+        animation: motion ? "stripSweep 6.5s linear infinite" : "none",
+      },
+      sceneBackdrop: {
+        position: "absolute", inset: 0, zIndex: 1, opacity: revealed ? 1 : 0,
+        transition: "opacity 1400ms ease 1000ms",
+        background: "radial-gradient(70% 60% at 30% 30%, rgba(20,42,72,.7), rgba(7,17,31,0) 70%), radial-gradient(60% 50% at 78% 70%, rgba(12,30,48,.75), rgba(7,17,31,0) 72%), linear-gradient(180deg,#0b0a12,#07111f 40%,#0a1420)",
+      },
+      sceneBronze: {
+        position: "absolute", inset: 0, zIndex: 1, opacity: revealed ? 1 : 0,
+        transition: "opacity 1600ms ease 1800ms",
+        background: "radial-gradient(46% 46% at 30% 52%, rgba(154,99,56,.34), rgba(7,17,31,0) 70%)",
+      },
+      sceneContentStyle: {
+        position: "relative", zIndex: 3, maxWidth: "1440px", margin: "0 auto",
+        minHeight: wide ? "88vh" : "auto",
+        display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(28px,4vw,60px)",
+      },
+      taglineColStyle: {
+        flex: wide ? "0 1 auto" : "1 1 320px",
+        minWidth: 0, display: "flex", flexDirection: "column", gap: "18px",
+        marginLeft: wide ? "60%" : 0,
+        zIndex: 5,
+      },
+      ringOuterStyle: {
+        position: "absolute", left: "34%", top: "52%",
+        transform: "translate(-50%,-50%)",
+        width: "min(46vw," + watchSize + "px)",
+        perspective: "1200px", zIndex: 4,
+      },
+      ringInnerStyle: {
+        position: "relative",
+        width: "100%",
+        aspectRatio: "1/1",
+        transformStyle: "preserve-3d",
+        transform: motion ? "rotateX(" + (-s.py * 1.6) + "deg) rotateY(" + (s.px * 1.6) + "deg)" : "none",
+        transition: "transform 600ms cubic-bezier(.16,1,.3,1)",
+      },
+      watchWrapStyle: {
+        position: "absolute", top: 0, left: 0, width: "100%", zIndex: 1,
+        opacity: revealed ? undefined : 0,
+        animation: revealed ? "watchIn 1200ms cubic-bezier(.16,1,.3,1) 3000ms both" : "none",
+      },
+      watchBreatheStyle: {
+        animation: revealed && motion ? "watchBreathe 7s ease-in-out 4.4s infinite" : "none",
+      },
+      taglineStyle: {
+        margin: 0, opacity: revealed ? undefined : 0,
+        animation: revealed ? "heroReveal 1000ms cubic-bezier(.16,1,.3,1) 4300ms both" : "none",
+      },
+      taglineCopyStyle: {
+        margin: 0, maxWidth: "30ch", fontSize: "clamp(15px,1.4vw,19px)", lineHeight: 1.7, color: "rgba(248,241,229,.88)",
+        opacity: revealed ? undefined : 0,
+        animation: revealed ? "heroReveal 900ms cubic-bezier(.16,1,.3,1) 4500ms both" : "none",
+      },
+      taglineHintStyle: {
+        margin: 0, fontSize: "12px", letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(216,180,106,.8)",
+        opacity: revealed ? undefined : 0,
+        animation: revealed ? "heroReveal 900ms cubic-bezier(.16,1,.3,1) 4800ms both" : "none",
+      },
+      orbitStyle: {
+        position: "absolute", inset: 0, transformStyle: "preserve-3d",
+        animation: motion && revealed ? "orbitSpin 120s linear 4.8s infinite" : "none",
+      },
+      ringCards: ringCards.map((c) => ({
+        ...c,
+        animStyle: { ...c.animStyle, animation: c.animStyle.animation === "none" || !motion ? c.animStyle.animation : c.animStyle.animation.replace("destinationFloat", floatK <= 0 ? "none" : "destinationFloat") },
+      })),
+      tabs,
+      activeTabCopy: active.copy,
+      activeTabUrl: active.url,
+      activeTabCta: active.cta,
+      onPointer: (e) => {
+        if (!motion || narrow) return;
+        const r = e.currentTarget.getBoundingClientRect();
+        this.setState({ px: (e.clientX - r.left) / r.width - 0.5, py: (e.clientY - r.top) / r.height - 0.5 });
+      },
+      onPointerLeave: () => this.setState({ px: 0, py: 0 }),
+      toggleMotion: () => this.setState({ motionOn: !s.motionOn }),
+      motionLabel: motion ? "Pause motion" : "Resume motion",
+    };
+  }
+}
+</script>
+</body>
+</html>
