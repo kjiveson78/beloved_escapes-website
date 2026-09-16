@@ -1,0 +1,14 @@
+name: Notify IndexNow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify IndexNow about Beloved Escapes homepage
+        run: |
+          curl --fail --silent --show-error             "https://api.indexnow.org/indexnow?url=https://belovedescapes.co.uk/&key=6d9b078f59a942369758ae8dad15a3bb"
